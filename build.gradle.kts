@@ -11,6 +11,8 @@ plugins {
 
 group = "com.scr.project"
 version = "0.0.1-SNAPSHOT"
+private val apacheAvroVersion: String by project
+private val rewardedManagementVersion: String by project
 
 java {
 	toolchain {
@@ -33,13 +35,14 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.kafka:spring-kafka")
     implementation("org.projectlombok:lombok")
-    implementation("org.apache.avro:avro:1.12.0")
-    implementation("io.projectreactor.kafka:reactor-kafka:1.3.23")
+    implementation("org.apache.avro:avro:$apacheAvroVersion")
     implementation("org.springframework.boot:spring-boot-starter-validation")
     runtimeOnly("org.postgresql:postgresql")
-    add("avroSchemas", "com.scr.project:service-rewarded-management:0.1.2:schemas")
+    add("avroSchemas", "com.scr.project:service-rewarded-management:$rewardedManagementVersion:schemas")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("com.h2database:h2")
+    testImplementation("org.mockito:mockito-core")
+    testImplementation("org.mockito:mockito-junit-jupiter")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 

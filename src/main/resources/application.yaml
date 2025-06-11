@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: service-jrewarded-management
+messaging:
+  topics:
+    rewarded-creation-notification: srm-rewarded-entity-creation-events
+  group-id: my_group

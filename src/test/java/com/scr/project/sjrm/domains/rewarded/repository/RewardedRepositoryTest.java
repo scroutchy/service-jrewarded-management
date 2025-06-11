@@ -21,6 +21,7 @@ class RewardedRepositoryTest {
     void saveShouldSucceed() {
         var rewarded = new Rewarded().setRewardedId("rewardedId").setType(ACTOR);
         var saved = rewardedRepository.save(rewarded);
+        assertThat(saved).isNotNull();
         var found = rewardedRepository.findById(saved.getId());
         assertThat(found).isPresent();
         assertThat(found.get().getId()).isNotNull();
@@ -34,13 +35,17 @@ class RewardedRepositoryTest {
         var reward1 = new Reward().setType("Oscar").setYear(2020).setCategory("Best Actor");
         var reward2 = new Reward().setType("Golden Globe").setYear(2021).setCategory("Best Actor");
         var rewarded = new Rewarded().setRewardedId("rewardedId").setType(ACTOR).setRewards(List.of(reward1, reward2));
+
         var saved = rewardedRepository.save(rewarded);
+
         var found = rewardedRepository.findById(saved.getId());
         assertThat(found).isPresent();
         assertThat(found.get().getRewards()).hasSize(2);
+        assertThat(found.get().getRewards().get(0).getId()).isNotNull();
         assertThat(found.get().getRewards().get(0).getType()).isEqualTo("Oscar");
         assertThat(found.get().getRewards().get(0).getYear()).isEqualTo(2020);
         assertThat(found.get().getRewards().get(0).getCategory()).isEqualTo("Best Actor");
+        assertThat(found.get().getRewards().get(1).getId()).isNotNull();
         assertThat(found.get().getRewards().get(1).getType()).isEqualTo("Golden Globe");
         assertThat(found.get().getRewards().get(1).getYear()).isEqualTo(2021);
         assertThat(found.get().getRewards().get(1).getCategory()).isEqualTo("Best Actor");

@@ -13,6 +13,7 @@ import lombok.experimental.Accessors;
 
 import java.util.List;
 
+import static jakarta.persistence.CascadeType.PERSIST;
 import static jakarta.persistence.EnumType.STRING;
 import static jakarta.persistence.GenerationType.IDENTITY;
 
@@ -34,6 +35,6 @@ public class Rewarded {
     @Column(nullable = false)
     private RewardedType type;
 
-    @OneToMany(mappedBy = "rewarded")
+    @OneToMany(mappedBy = "rewarded", cascade = PERSIST)
     private List<Reward> rewards = List.of();
 }

@@ -26,7 +26,7 @@ public class Reward {
     @Column(nullable = false)
     private String type;
 
-    @Column(nullable = false)
+    @Column(name = "year_edition", nullable = false)
     private int year;
 
     @Column(nullable = false)

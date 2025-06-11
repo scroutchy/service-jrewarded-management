@@ -35,5 +35,5 @@ public class Rewarded {
     private RewardedType type;
 
     @OneToMany(mappedBy = "rewarded")
-    private List<Reward> rewards;
+    private List<Reward> rewards = List.of();
 }

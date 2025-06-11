@@ -1,6 +1,11 @@
 spring:
   application:
     name: service-jrewarded-management
+  datasource:
+    url: jdbc:postgresql://localhost:5432/dev-scr #TODO: change
+    username: scr
+    password: chicoziggy #TODO: secret
+    driver-class-name: org.postgresql.Driver
 messaging:
   topics:
     rewarded-creation-notification: srm-rewarded-entity-creation-events

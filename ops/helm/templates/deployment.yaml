@@ -23,21 +23,6 @@ spec:
             imagePullPolicy: {{ .Values.image.pullPolicy }}
             ports:
               - containerPort: {{ .Values.service.port }}
-#            env:
-#              - name: SPRING_DATA_MONGODB_URI
-#                valueFrom:
-#                  secretKeyRef:
-#                    name: mongodb-secret-srm
-#                    key: mongodbUri
-#              - name: KAFKA_BOOTSTRAP_SERVERS
-#                value: {{ .Values.kafka.bootstrapServers }}
-#              - name: SCHEMA_REGISTRY_URL
-#                value: {{ .Values.kafka.schemaRegistryUrl }}
-#              - name: KAFKA_SASL_PASSWORD
-#                valueFrom:
-#                  secretKeyRef:
-#                    name: sasl-password-secret
-#                    key: saslPassword
             resources:
               requests:
                 ephemeral-storage: {{ .Values.resources.requests.ephemeralStorage }}

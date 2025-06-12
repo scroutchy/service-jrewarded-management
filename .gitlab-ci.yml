@@ -32,7 +32,7 @@ stages:
 #  - sonar
   - publish
 #  - container_scan
-#  - deploy
+  - deploy
 
 build:
   stage: build
@@ -86,3 +86,26 @@ publish:
   artifacts:
     paths:
       - build/libs/*.jar
+
+.deploy_base:
+  services: []
+  stage: deploy
+  when: manual
+  image: alpine:latest
+  before_script:
+    - apk update
+    - apk add curl bash
+    - curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | VERIFY_CHECKSUM=false bash
+    - echo "$KUBECONFIG_CLUSTER" > kubeconfig.yaml
+    - export KUBECONFIG=$(pwd)/kubeconfig.yaml
+  script:
+    - helm version
+    - helm upgrade --install springboot-app-jrewarded ./ops/helm --set image.tag=${CI_COMMIT_REF_SLUG} -f ./ops/helm/values.yaml -f "$CLUSTER_VALUES_FILE" --debug
+
+deploy_kind:
+  tags:
+    - k8s_docker
+  extends: .deploy_base
+  variables:
+    KUBECONFIG_CLUSTER: "$KUBECONFIG_CONTENT_K8SinDD"
+    CLUSTER_VALUES_FILE: "./ops/helm/values-kind.yaml"

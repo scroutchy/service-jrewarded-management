@@ -1,0 +1,60 @@
+package com.scr.project.sjrm.entrypoint.integration.messaging.v1;
+
+import com.scr.project.sjrm.AbstractIntegrationTest;
+import com.scr.project.sjrm.KafkaTestProducerConfig;
+import com.scr.project.sjrm.domains.rewarded.model.entity.Rewarded;
+import com.scr.project.sjrm.domains.rewarded.model.entity.RewardedType;
+import com.scr.project.sjrm.domains.rewarded.repository.RewardedRepository;
+import com.scr.project.srm.RewardedKafkaDto;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
+import org.springframework.data.domain.Example;
+import org.springframework.data.repository.query.FluentQuery;
+import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.transaction.annotation.Transactional;
+
+import static com.scr.project.sjrm.TestExtensions.awaitUntil;
+import static com.scr.project.srm.RewardedEntityTypeKafkaDto.ACTOR;
+import static org.assertj.core.api.Assertions.assertThat;
+
+@SpringBootTest
+@Import(KafkaTestProducerConfig.class)
+class RewardedProcessorV1IntegrationTest extends AbstractIntegrationTest {
+
+    @Autowired
+    private RewardedRepository rewardedRepository;
+
+    @Autowired
+    private KafkaTemplate<String, RewardedKafkaDto> rewardedKafkaTemplate;
+
+    @Test
+    @Transactional
+    void consumeShouldSuccessfullyProcessRewardedMessage() {
+        var rewardedKafkaDto = new RewardedKafkaDto("rewardedId", ACTOR);
+        try {
+            var future = rewardedKafkaTemplate.send("srm-rewarded-entity-creation-events", rewardedKafkaDto);
+            future.whenComplete((result, ex) -> {
+                if (ex == null) {
+                    System.out.println("[TEST] Message successfully sent on Kafka : " + rewardedKafkaDto);
+                } else {
+                    System.err.println("[TEST] Failure during sending of Kafka message : " + ex.getMessage());
+                }
+            });
+        } catch (Exception e) {
+            System.err.println("[TEST] Failure during sending of Kafka message : " + e.getMessage());
+            throw e;
+        }
+        awaitUntil(() -> {
+            var rewarded = rewardedRepository.findBy(Example.of(new Rewarded().setRewardedId("rewardedId")),
+                                                     FluentQuery.FetchableFluentQuery::first);
+            assertThat(rewarded).isPresent();
+            assertThat(rewarded.get().getId()).isNotNull();
+            assertThat(rewarded.get().getRewardedId()).isEqualTo("rewardedId");
+            assertThat(rewarded.get().getType()).isEqualTo(RewardedType.ACTOR);
+        });
+
+    }
+
+}

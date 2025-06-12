@@ -13,6 +13,7 @@ group = "com.scr.project"
 version = "0.0.1-SNAPSHOT"
 private val apacheAvroVersion: String by project
 private val rewardedManagementVersion: String by project
+private val kafkaAvroSerializerVersion: String by project
 
 java {
 	toolchain {
@@ -37,12 +38,16 @@ dependencies {
     implementation("org.projectlombok:lombok")
     implementation("org.apache.avro:avro:$apacheAvroVersion")
     implementation("org.springframework.boot:spring-boot-starter-validation")
+    implementation("io.confluent:kafka-avro-serializer:$kafkaAvroSerializerVersion")
     runtimeOnly("org.postgresql:postgresql")
     add("avroSchemas", "com.scr.project:service-rewarded-management:$rewardedManagementVersion:schemas")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("com.h2database:h2")
     testImplementation("org.mockito:mockito-core")
     testImplementation("org.mockito:mockito-junit-jupiter")
+    testImplementation("org.testcontainers:testcontainers")
+    testImplementation("org.testcontainers:junit-jupiter")
+    testImplementation("org.testcontainers:kafka")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 

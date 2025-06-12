@@ -19,6 +19,10 @@ spring:
         mechanism: PLAIN
         username: user1
         password: RWqadPW9cb #TODO: secret
+        jaas.config:
+          org.apache.kafka.common.security.plain.PlainLoginModule required
+          username="user1"
+          password="RWqadPW9cb";
 messaging:
   topics:
     rewarded-creation-notification: srm-rewarded-entity-creation-events

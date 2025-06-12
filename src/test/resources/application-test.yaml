@@ -12,9 +12,9 @@ spring:
     bootstrap-servers: kafka:9092
     properties:
       schema.registry.url: http://schema-registry:8081
+      security.protocol: PLAINTEXT
+      sasl:
+        mechanism:
+        password: dummyPassword
     consumer:
       group-id: my_group
-    security-protocol: PLAINTEXT
-    sasl:
-      mechanism:
-      password: dummyPassword

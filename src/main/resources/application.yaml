@@ -30,4 +30,4 @@ spring:
 messaging:
   topics:
     rewarded-creation-notification: srm-rewarded-entity-creation-events
-  group-id: my_group
+  group-id: rewarded-sql

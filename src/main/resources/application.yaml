@@ -14,6 +14,11 @@ spring:
     properties:
       schema.registry.url: http://schema-registry.kafka.svc.cluster.local:8081 #TODO: change
       specific.avro.reader: true
+      security.protocol: SASL_PLAINTEXT
+      sasl:
+        mechanism: PLAIN
+        username: user1
+        password: RWqadPW9cb #TODO: secret
 messaging:
   topics:
     rewarded-creation-notification: srm-rewarded-entity-creation-events

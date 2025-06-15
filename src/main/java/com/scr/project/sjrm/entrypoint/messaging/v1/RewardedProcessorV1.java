@@ -22,7 +22,7 @@ public class RewardedProcessorV1 {
     @KafkaListener(topics = "${messaging.topics.rewarded-creation-notification}", groupId = "${messaging.group-id}")
     public void consume(RewardedKafkaDto message) {
         var rewarded = RewardedMappings.toEntity(message);
-        rewardedService.create(rewarded);
+        rewardedService.save(rewarded);
         LOGGER.info("RewardedKafkaDto message consumed: {}", message);
     }
 

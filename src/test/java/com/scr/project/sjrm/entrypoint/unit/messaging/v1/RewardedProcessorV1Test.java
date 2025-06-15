@@ -28,9 +28,9 @@ class RewardedProcessorV1Test {
     @Test
     void consumeShouldSucceedAndCallRewardedService() {
         var kafkaDto = new RewardedKafkaDto("rewardedId", ACTOR);
-        when(rewardedService.create(any())).thenAnswer(i -> i.getArgument(0));
+        when(rewardedService.save(any())).thenAnswer(i -> i.getArgument(0));
         rewardedProcessorV1.consume(kafkaDto);
-        verify(rewardedService, times(1)).create(RewardedMappings.toEntity(kafkaDto));
+        verify(rewardedService, times(1)).save(RewardedMappings.toEntity(kafkaDto));
     }
 
 }

@@ -26,6 +26,14 @@ public final class RewardedMappings {
                 .setRewards(entity.getRewards().stream().map(RewardedMappings::toApiDto).toList());
     }
 
+    public static Reward toEntity(RewardApiDto dto) {
+        return new Reward()
+                .setId(dto.getId())
+                .setCategory(dto.getCategory())
+                .setYear(dto.getYear())
+                .setType(dto.getType());
+    }
+
     private static RewardApiDto toApiDto(Reward entity) {
         return new RewardApiDto()
                 .setId(entity.getId())

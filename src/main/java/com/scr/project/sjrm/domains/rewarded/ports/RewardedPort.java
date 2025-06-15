@@ -6,7 +6,7 @@ import java.util.Optional;
 
 public interface RewardedPort {
 
-    Rewarded create(Rewarded rewarded);
+    Rewarded save(Rewarded rewarded);
 
     Optional<Rewarded> findBy(Long id);
 }

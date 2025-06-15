@@ -1,0 +1,22 @@
+nameOverride: jrewarded-management
+fullnameOverride: service-jrewarded-management
+
+replicaCount: 1
+
+image:
+  repository: registry.gitlab.com/cinema7590904/service-jrewarded-management
+  tag: latest
+  pullPolicy: Always
+
+service:
+  type: ClusterIP
+  port: 8080
+
+resources:
+  requests:
+    ephemeralStorage: "1Gi"
+    memory: "256Mi"
+    cpu: "250m"
+  limits:
+    memory: "512Mi"
+    cpu: "500m"

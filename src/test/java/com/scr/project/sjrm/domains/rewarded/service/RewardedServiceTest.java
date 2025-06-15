@@ -29,7 +29,7 @@ class RewardedServiceTest {
     void createShouldSucceed() {
         var rewarded = new Rewarded().setRewardedId("rewardedId").setType(ACTOR);
         when(rewardedRepository.save(rewarded)).thenReturn(rewarded.setId(1L));
-        var result = rewardedService.create(rewarded);
+        var result = rewardedService.save(rewarded);
         assertThat(result.getId()).isEqualTo(1L);
         assertThat(result.getRewardedId()).isEqualTo("rewardedId");
         assertThat(result.getType()).isEqualTo(ACTOR);

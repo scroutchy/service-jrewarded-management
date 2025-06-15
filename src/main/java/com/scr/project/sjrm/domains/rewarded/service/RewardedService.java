@@ -21,7 +21,7 @@ public class RewardedService implements RewardedPort {
     }
 
     @Override
-    public Rewarded create(Rewarded rewarded) {
+    public Rewarded save(Rewarded rewarded) {
         LOGGER.debug("Creating rewarded entity with RewardedID: {}", rewarded.getRewardedId());
         var savedRewarded = rewardedRepository.save(rewarded);
         LOGGER.info("Created rewarded entity with RewardedID: {}", rewarded.getRewardedId());

@@ -8,6 +8,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Optional;
+
 import static com.scr.project.sjrm.domains.rewarded.model.entity.RewardedType.ACTOR;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.times;
@@ -32,6 +34,26 @@ class RewardedServiceTest {
         assertThat(result.getRewardedId()).isEqualTo("rewardedId");
         assertThat(result.getType()).isEqualTo(ACTOR);
         verify(rewardedRepository, times(1)).save(rewarded);
+    }
+
+    @Test
+    void findByIdShouldSucceed() {
+        var rewarded = new Rewarded().setId(1L).setRewardedId("rewardedId").setType(ACTOR);
+        when(rewardedRepository.findById(1L)).thenReturn(Optional.of(rewarded));
+        var result = rewardedService.findBy(1L);
+        assertThat(result).isPresent();
+        assertThat(result.get().getId()).isEqualTo(1L);
+        assertThat(result.get().getRewardedId()).isEqualTo("rewardedId");
+        assertThat(result.get().getType()).isEqualTo(ACTOR);
+        verify(rewardedRepository, times(1)).findById(1L);
+    }
+
+    @Test
+    void findByIdShouldReturnEmptyWhenNotFound() {
+        when(rewardedRepository.findById(1L)).thenReturn(Optional.empty());
+        var result = rewardedService.findBy(1L);
+        assertThat(result).isNotPresent();
+        verify(rewardedRepository, times(1)).findById(1L);
     }
 
 }

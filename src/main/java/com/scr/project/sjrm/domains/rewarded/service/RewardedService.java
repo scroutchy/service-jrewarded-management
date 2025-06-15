@@ -7,6 +7,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class RewardedService implements RewardedPort {
 
@@ -24,5 +26,13 @@ public class RewardedService implements RewardedPort {
         var savedRewarded = rewardedRepository.save(rewarded);
         LOGGER.info("Created rewarded entity with RewardedID: {}", rewarded.getId());
         return savedRewarded;
+    }
+
+    @Override
+    public Optional<Rewarded> findBy(Long id) {
+        LOGGER.debug("Searching for rewarded entity with ID: {}", id);
+        var rewarded = rewardedRepository.findById(id);
+        LOGGER.info("Found rewarded entity with ID: {}", id);
+        return rewarded;
     }
 }

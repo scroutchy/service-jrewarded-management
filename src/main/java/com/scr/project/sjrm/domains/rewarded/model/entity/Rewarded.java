@@ -3,11 +3,11 @@ package com.scr.project.sjrm.domains.rewarded.model.entity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
@@ -23,6 +23,7 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 @Table(name = "rewarded")
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 @Accessors(chain = true)
 public class Rewarded {
 
@@ -37,6 +38,6 @@ public class Rewarded {
     @Column(nullable = false)
     private RewardedType type;
 
-    @OneToMany(mappedBy = "rewarded", cascade = PERSIST, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "rewarded", cascade = PERSIST)
     private List<Reward> rewards = new ArrayList<>();
 }

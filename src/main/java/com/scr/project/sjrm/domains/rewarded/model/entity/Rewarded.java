@@ -16,7 +16,7 @@ import lombok.experimental.Accessors;
 import java.util.ArrayList;
 import java.util.List;
 
-import static jakarta.persistence.CascadeType.PERSIST;
+import static jakarta.persistence.CascadeType.ALL;
 import static jakarta.persistence.EnumType.STRING;
 import static jakarta.persistence.GenerationType.IDENTITY;
 
@@ -39,6 +39,6 @@ public class Rewarded {
     @Column(nullable = false)
     private RewardedType type;
 
-    @OneToMany(mappedBy = "rewarded", cascade = PERSIST)
+    @OneToMany(mappedBy = "rewarded", cascade = ALL)
     private List<Reward> rewards = new ArrayList<>();
 }

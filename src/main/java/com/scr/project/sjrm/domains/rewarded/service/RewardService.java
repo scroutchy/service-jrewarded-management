@@ -23,12 +23,12 @@ public class RewardService {
         LOGGER.debug("Adding reward to rewarded entity with ID: {}", id);
         return rewardedService.findBy(id).map(
                 r -> {
+                    newReward.setRewarded(r);
                     r.getRewards().add(newReward);
                     var res = rewardedService.save(r);
-                    LOGGER.info("Reward {} added to rewarded entity with ID: {}", newReward, id);
+                    LOGGER.info("Reward added to rewarded entity with ID: {}", id);
                     return res;
                 }
         );
     }
-
 }

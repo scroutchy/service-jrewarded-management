@@ -34,7 +34,7 @@ public class RewardedResource {
                               .orElse(ResponseEntity.notFound().build());
     }
 
-    @PostMapping("/{id}")
+    @PostMapping("/{id}/rewards")
     public ResponseEntity<RewardedApiDto> addReward(@RequestBody RewardApiDto rewardDto, @PathVariable Long id) {
         var reward = RewardedMappings.toEntity(rewardDto);
         return rewardService.addReward(reward, id)

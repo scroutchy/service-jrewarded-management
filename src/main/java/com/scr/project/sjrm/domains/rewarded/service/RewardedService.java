@@ -24,7 +24,7 @@ public class RewardedService implements RewardedPort {
     public Rewarded create(Rewarded rewarded) {
         LOGGER.debug("Creating rewarded entity with RewardedID: {}", rewarded.getRewardedId());
         var savedRewarded = rewardedRepository.save(rewarded);
-        LOGGER.info("Created rewarded entity with RewardedID: {}", rewarded.getId());
+        LOGGER.info("Created rewarded entity with RewardedID: {}", rewarded.getRewardedId());
         return savedRewarded;
     }
 
@@ -32,7 +32,11 @@ public class RewardedService implements RewardedPort {
     public Optional<Rewarded> findBy(Long id) {
         LOGGER.debug("Searching for rewarded entity with ID: {}", id);
         var rewarded = rewardedRepository.findById(id);
-        LOGGER.info("Found rewarded entity with ID: {}", id);
+        if (rewarded.isPresent()) {
+            LOGGER.info("Found rewarded entity with ID: {}", id);
+        } else {
+            LOGGER.warn("No rewarded entity found with ID: {}", id);
+        }
         return rewarded;
     }
 }

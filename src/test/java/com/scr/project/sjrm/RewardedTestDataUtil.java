@@ -21,6 +21,8 @@ public class RewardedTestDataUtil {
         entityManager.persist(reward2);
         rewarded2.getRewards().add(reward1);
         rewarded2.getRewards().add(reward2);
+        reward1.setRewarded(rewarded2);
+        reward2.setRewarded(rewarded2);
         entityManager.flush();
     }
 

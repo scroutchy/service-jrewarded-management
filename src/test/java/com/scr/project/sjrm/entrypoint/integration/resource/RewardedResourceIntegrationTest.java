@@ -2,13 +2,12 @@ package com.scr.project.sjrm.entrypoint.integration.resource;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.scr.project.sjrm.AbstractIntegrationTest;
+import com.scr.project.sjrm.RewardedTestDataService;
 import com.scr.project.sjrm.domains.rewarded.model.entity.Rewarded;
 import com.scr.project.sjrm.domains.rewarded.repository.RewardedRepository;
 import com.scr.project.sjrm.domains.rewarded.service.RewardedService;
 import com.scr.project.sjrm.entrypoint.model.api.RewardApiDto;
 import com.scr.project.sjrm.entrypoint.model.api.RewardedApiDto;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +19,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.scr.project.sjrm.RewardedTestDataUtil.initTestData;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.CoreMatchers.is;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
@@ -41,8 +39,8 @@ class RewardedResourceIntegrationTest extends AbstractIntegrationTest {
     @Autowired
     private RewardedRepository rewardedRepository;
 
-    @PersistenceContext
-    private EntityManager entityManager;
+    @Autowired
+    private RewardedTestDataService rewardedTestDataService;
 
     @Autowired
     private MockMvc mockMvc;
@@ -51,7 +49,7 @@ class RewardedResourceIntegrationTest extends AbstractIntegrationTest {
 
     @BeforeEach
     void setUp() {
-        initTestData(entityManager, rewardedRepository);
+        rewardedTestDataService.initTestData();
     }
 
     @Test

@@ -8,7 +8,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Index;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import jakarta.persistence.UniqueConstraint;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -22,10 +21,7 @@ import static jakarta.persistence.EnumType.STRING;
 import static jakarta.persistence.GenerationType.IDENTITY;
 
 @Entity
-@Table(name = "rewarded",
-        indexes = @Index(columnList = "rewarded_id", unique = true),
-        uniqueConstraints = @UniqueConstraint(columnNames = {"type", "rewarded_id"})
-)
+@Table(name = "rewarded", indexes = @Index(columnList = "type, rewarded_id", unique = true))
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

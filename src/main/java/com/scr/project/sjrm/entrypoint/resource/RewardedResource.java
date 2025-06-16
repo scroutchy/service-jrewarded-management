@@ -2,7 +2,7 @@ package com.scr.project.sjrm.entrypoint.resource;
 
 import com.scr.project.sjrm.domains.rewarded.service.RewardService;
 import com.scr.project.sjrm.domains.rewarded.service.RewardedService;
-import com.scr.project.sjrm.entrypoint.exception.OnRewardedNotFound;
+import com.scr.project.sjrm.entrypoint.exception.RewardedExceptions.OnRewardedNotFound;
 import com.scr.project.sjrm.entrypoint.mapper.RewardedMappings;
 import com.scr.project.sjrm.entrypoint.model.api.RewardApiDto;
 import com.scr.project.sjrm.entrypoint.model.api.RewardedApiDto;

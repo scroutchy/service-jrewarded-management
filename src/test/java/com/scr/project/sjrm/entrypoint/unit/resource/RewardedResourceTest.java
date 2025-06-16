@@ -3,6 +3,7 @@ package com.scr.project.sjrm.entrypoint.unit.resource;
 import com.scr.project.sjrm.domains.rewarded.model.entity.Rewarded;
 import com.scr.project.sjrm.domains.rewarded.service.RewardService;
 import com.scr.project.sjrm.domains.rewarded.service.RewardedService;
+import com.scr.project.sjrm.entrypoint.exception.OnRewardedNotFound;
 import com.scr.project.sjrm.entrypoint.mapper.RewardedMappings;
 import com.scr.project.sjrm.entrypoint.model.api.RewardApiDto;
 import com.scr.project.sjrm.entrypoint.resource.RewardedResource;
@@ -17,11 +18,11 @@ import java.util.Optional;
 
 import static com.scr.project.sjrm.domains.rewarded.model.entity.RewardedType.ACTOR;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.HttpStatus.CREATED;
-import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.HttpStatus.OK;
 
 @ExtendWith(MockitoExtension.class)
@@ -53,8 +54,9 @@ class RewardedResourceTest {
     @Test
     void findShouldReturnNotFoundWhenRewardedDoesNotExist() {
         when(rewardedService.findBy(1L)).thenReturn(Optional.empty());
-        var result = rewardedResource.find(1L);
-        assertThat(result.getStatusCode()).isEqualTo(NOT_FOUND);
+        assertThatThrownBy(() -> rewardedResource.find(1L))
+                .isInstanceOf(OnRewardedNotFound.class)
+                .hasMessageContaining("Rewarded with id " + 1L + " not found");
         verify(rewardedService, times(1)).findBy(1L);
     }
 
@@ -81,7 +83,9 @@ class RewardedResourceTest {
         var newRewardDto = new RewardApiDto().setCategory("Best actor").setType("Oscar").setYear(2020);
         when(rewardService.addReward(RewardedMappings.toEntity(newRewardDto), 1L)).thenReturn(
                 Optional.empty());
-        var result = rewardedResource.addReward(newRewardDto, 1L);
-        assertThat(result.getStatusCode()).isEqualTo(NOT_FOUND);
+        assertThatThrownBy(() -> rewardedResource.addReward(newRewardDto, 1L))
+                .isInstanceOf(OnRewardedNotFound.class)
+                .hasMessageContaining("Rewarded with id " + 1L + " not found");
+        verify(rewardService, times(1)).addReward(RewardedMappings.toEntity(newRewardDto), 1L);
     }
 }

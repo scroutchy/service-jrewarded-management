@@ -5,6 +5,7 @@ import com.scr.project.sjrm.domains.rewarded.service.RewardedService;
 import com.scr.project.sjrm.entrypoint.mapper.RewardedMappings;
 import com.scr.project.sjrm.entrypoint.model.api.RewardApiDto;
 import com.scr.project.sjrm.entrypoint.model.api.RewardedApiDto;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,6 +13,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import static org.springframework.http.HttpStatus.CREATED;
 
 @RestController
 @RequestMapping("api/rewarded")
@@ -35,11 +38,11 @@ public class RewardedResource {
     }
 
     @PostMapping("/{id}/rewards")
-    public ResponseEntity<RewardedApiDto> addReward(@RequestBody RewardApiDto rewardDto, @PathVariable Long id) {
+    public ResponseEntity<RewardedApiDto> addReward(@RequestBody @Valid RewardApiDto rewardDto, @PathVariable Long id) {
         var reward = RewardedMappings.toEntity(rewardDto);
         return rewardService.addReward(reward, id)
                             .map(RewardedMappings::toApiDto)
-                            .map(ResponseEntity::ok)
+                            .map(r -> ResponseEntity.status(CREATED).body(r))
                             .orElse(ResponseEntity.notFound().build());
     }
 

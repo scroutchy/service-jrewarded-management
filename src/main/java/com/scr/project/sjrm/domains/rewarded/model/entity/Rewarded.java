@@ -5,6 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.Index;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
@@ -21,7 +22,10 @@ import static jakarta.persistence.EnumType.STRING;
 import static jakarta.persistence.GenerationType.IDENTITY;
 
 @Entity
-@Table(name = "rewarded", uniqueConstraints = @UniqueConstraint(columnNames = {"type", "rewarded_id"}))
+@Table(name = "rewarded",
+        indexes = @Index(columnList = "rewarded_id", unique = true),
+        uniqueConstraints = @UniqueConstraint(columnNames = {"type", "rewarded_id"})
+)
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

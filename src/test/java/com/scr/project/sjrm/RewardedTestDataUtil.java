@@ -10,7 +10,9 @@ import static com.scr.project.sjrm.domains.rewarded.model.entity.RewardedType.AC
 public class RewardedTestDataUtil {
 
     public static void initTestData(EntityManager entityManager, RewardedRepository rewardedRepository) {
+        entityManager.createQuery("DELETE FROM Reward").executeUpdate();
         rewardedRepository.deleteAll();
+        entityManager.flush();
         Rewarded rewarded1 = new Rewarded().setType(ACTOR).setRewardedId("rewardedId1");
         Rewarded rewarded2 = new Rewarded().setType(ACTOR).setRewardedId("rewardedId2");
         entityManager.persist(rewarded1);

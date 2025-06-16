@@ -47,7 +47,7 @@ class RewardedResourceIntegrationTest extends AbstractIntegrationTest {
     @Autowired
     private MockMvc mockMvc;
 
-    private ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     @BeforeEach
     void setUp() {
@@ -79,12 +79,7 @@ class RewardedResourceIntegrationTest extends AbstractIntegrationTest {
         var result = mockMvc.perform(MockMvcRequestBuilders.post("/api/rewarded/" + id + "/rewards")
                                                            .contentType(APPLICATION_JSON)
                                                            .content(objectMapper.writeValueAsString(rewardDto)))
-                            .andExpect(status().isOk())
-//               .andExpect(jsonPath("$.id").isNotEmpty())
-//               .andExpect(jsonPath("$.rewardedId", is("rewardedId1")))
-//               .andExpect(jsonPath("$.type", is("ACTOR")))
-//               .andExpect(jsonPath("$.rewards").isNotEmpty())
-//               .andExpect(jsonPath("$.rewards", hasSize(1)));
+                            .andExpect(status().isCreated())
                             .andReturn();
         var response = objectMapper.readValue(result.getResponse().getContentAsString(), RewardedApiDto.class);
         assertThat(response.getId()).isNotNull();
@@ -94,7 +89,24 @@ class RewardedResourceIntegrationTest extends AbstractIntegrationTest {
         assertThat(response.getRewards().get(0).getCategory()).isEqualTo("Best Actor");
         assertThat(response.getRewards().get(0).getType()).isEqualTo("Oscar");
         assertThat(response.getRewards().get(0).getYear()).isEqualTo(2022);
+    }
 
+    @Test
+    void addRewardShouldReturnBasRequestWhenYearTooFarInPast() throws Exception {
+        var newRewardDto = new RewardApiDto().setCategory("Best actor").setType("Oscar").setYear(1899);
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/rewarded/" + 56L + "/rewards")
+                                              .contentType(APPLICATION_JSON)
+                                              .content(objectMapper.writeValueAsString(newRewardDto)))
+               .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void addRewardShouldReturnBadRequestWhenCategoryIsLeftBlank() throws Exception {
+        var newRewardDto = new RewardApiDto().setCategory("").setType("Oscar").setYear(2022);
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/rewarded/" + 56L + "/rewards")
+                                              .contentType(APPLICATION_JSON)
+                                              .content(objectMapper.writeValueAsString(newRewardDto)))
+               .andExpect(status().isBadRequest());
     }
 
 }

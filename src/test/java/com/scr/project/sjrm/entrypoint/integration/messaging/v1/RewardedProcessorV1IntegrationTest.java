@@ -16,6 +16,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.Example;
 import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.transaction.annotation.Transactional;
 
 import static com.scr.project.sjrm.TestExtensions.awaitUntil;
 import static com.scr.project.srm.RewardedEntityTypeKafkaDto.ACTOR;
@@ -42,6 +43,7 @@ class RewardedProcessorV1IntegrationTest extends AbstractIntegrationTest {
     }
 
     @Test
+    @Transactional(readOnly = true)
     void consumeShouldSuccessfullyProcessRewardedMessage() {
         var rewardedKafkaDto = new RewardedKafkaDto("rewardedId", ACTOR);
         try {
@@ -57,15 +59,18 @@ class RewardedProcessorV1IntegrationTest extends AbstractIntegrationTest {
             logger.error("Failure during sending of Kafka message : {}", e.getMessage());
             throw e;
         }
+
         awaitUntil(() -> {
             var rewarded = rewardedRepository.findOne(Example.of(new Rewarded().setRewardedId("rewardedId")));
             assertThat(rewarded).isPresent();
-            assertThat(rewarded.get().getId()).isNotNull();
-            assertThat(rewarded.get().getRewardedId()).isEqualTo("rewardedId");
-            assertThat(rewarded.get().getType()).isEqualTo(RewardedType.ACTOR);
-//            assertThat(rewarded.get().getRewards()).isEmpty();
         });
-
+        var optRewarded = rewardedRepository.findOne(Example.of(new Rewarded().setRewardedId("rewardedId")));
+        assertThat(optRewarded).isPresent();
+        var rewarded = optRewarded.get();
+        assertThat(rewarded.getId()).isNotNull();
+        assertThat(rewarded.getRewardedId()).isEqualTo("rewardedId");
+        assertThat(rewarded.getType()).isEqualTo(RewardedType.ACTOR);
+        assertThat(rewarded.getRewards()).isEmpty();
     }
 
     @Test

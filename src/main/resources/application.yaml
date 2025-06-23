@@ -28,6 +28,11 @@ spring:
           org.apache.kafka.common.security.plain.PlainLoginModule required
           username="user1"
           password="RWqadPW9cb";
+server:
+  tomcat:
+    threads:
+      max: 1
+      min-spare: 1
 messaging:
   topics:
     rewarded-creation-notification: srm-rewarded-entity-creation-events

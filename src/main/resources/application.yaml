@@ -1,0 +1,34 @@
+spring:
+  application:
+    name: service-jrewarded-management
+  datasource:
+    url: jdbc:postgresql://postgresql:5432/dev-scr #TODO: change
+    username: scr
+    password: chicoziggy #TODO: secret
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    open-in-view: false
+  kafka:
+    bootstrap-servers: kafka.kafka.svc.cluster.local:9092
+    consumer:
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
+    properties:
+      schema.registry.url: http://schema-registry.kafka.svc.cluster.local:8081 #TODO: change
+      specific.avro.reader: true
+      security.protocol: SASL_PLAINTEXT
+      sasl:
+        mechanism: PLAIN
+        username: user1
+        password: RWqadPW9cb #TODO: secret
+        jaas.config:
+          org.apache.kafka.common.security.plain.PlainLoginModule required
+          username="user1"
+          password="RWqadPW9cb";
+messaging:
+  topics:
+    rewarded-creation-notification: srm-rewarded-entity-creation-events
+  group-id: rewarded-sql
